@@ -1,0 +1,31 @@
+/* Styles for Recipient Manager */
+.nav-tab-wrapper {
+    margin-bottom: 15px;
+}
+
+.tab-content {
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-top: none;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Additional styles */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-custom th, .table-custom td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.table-custom th {
+    background-color: #f1f1f1;
+}
