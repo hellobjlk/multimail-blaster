@@ -33,7 +33,7 @@ function mmb_smtp_manager_page() {
         </div>
     </div>
 
-    <!-- JavaScript for Tab Switching -->
+    <!-- Adding JavaScript to handle tab switching -->
     <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         const tabs = document.querySelectorAll('.nav-tab');
@@ -42,17 +42,30 @@ function mmb_smtp_manager_page() {
         tabs.forEach(function (tab, index) {
             tab.addEventListener('click', function (e) {
                 e.preventDefault();
+
+                // Remove active class from all tabs and hide all content
                 tabs.forEach(function (item) {
                     item.classList.remove('nav-tab-active');
                 });
-                tab.classList.add('nav-tab-active');
                 contents.forEach(function (content) {
                     content.style.display = 'none';
                 });
+
+                // Add active class to clicked tab and show corresponding content
+                tab.classList.add('nav-tab-active');
                 contents[index].style.display = 'block';
             });
         });
     });
     </script>
+
+    <style>
+        .tab-content {
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+    </style>
     <?php
 }
