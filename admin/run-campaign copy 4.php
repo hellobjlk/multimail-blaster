@@ -27,18 +27,9 @@ function log_campaign_event($message) {
     file_put_contents($log_file, $timestamp . ' ' . $message . PHP_EOL, FILE_APPEND);
 }
 
-// Function to send emails using wp_mail()
+// Function to send emails using wp_mail() and log results
 function send_campaign_email($smtp_account, $recipient, $subject, $message) {
     global $phpmailer;
-
-    // Set the From address using SMTP account details
-    add_filter('wp_mail_from', function() use ($smtp_account) {
-        return $smtp_account->smtp_username; // Use the SMTP account's username as the "From" address
-    });
-
-    add_filter('wp_mail_from_name', function() use ($smtp_account) {
-        return $smtp_account->smtp_host; // Optionally use the SMTP host as the "From" name
-    });
 
     // Set up email headers
     $headers = array('Content-Type: text/html; charset=UTF-8');
@@ -56,7 +47,6 @@ function send_campaign_email($smtp_account, $recipient, $subject, $message) {
 
     return $success;
 }
-
 
 // Function to handle running the campaign and processing recipients
 function mmb_run_campaign($campaign_id, $recipient_group_id, $smtp_id) {

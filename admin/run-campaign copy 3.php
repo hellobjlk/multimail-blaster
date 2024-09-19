@@ -10,7 +10,14 @@ $campaigns = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}mmb_campaigns");
 $recipient_groups = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}mmb_recipient_groups");
 
 // Fetch SMTP accounts
-$smtp_accounts = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}mmb_smtp_accounts");
+$smtp_table = $wpdb->prefix . 'mmb_smtp_accounts';
+$smtp_accounts = $wpdb->get_results("SELECT * FROM $smtp_table");
+
+// Error handling if no SMTP accounts are found
+if (empty($smtp_accounts)) {
+    echo '<div class="notice notice-error is-dismissible"><p>' . __('No SMTP accounts found. Please add an SMTP account.', 'multimail-blaster') . '</p></div>';
+    return;
+}
 
 ?>
 <h2><?php esc_html_e('Run Campaign', 'multimail-blaster'); ?></h2>
@@ -99,7 +106,7 @@ function mmb_run_campaign($campaign_id, $recipient_group_id, $smtp_id) {
             );
 
             // Send email using wp_mail() (actual email sending function)
-            $email_sent = send_campaign_email($recipient, $campaign->subject, $personalized_message);
+            $email_sent = send_campaign_email($recipient, $campaign->subject, $personalized_message, $smtp_account);
 
             // Log the result
             $wpdb->insert(
@@ -107,7 +114,7 @@ function mmb_run_campaign($campaign_id, $recipient_group_id, $smtp_id) {
                 [
                     'campaign_id' => $campaign_id,
                     'recipient_id' => $recipient->id,
-                    'smtp_id' => $smtp_id,
+                    'smtp_id' => $smtp_account->id,
                     'status' => $email_sent ? 'sent' : 'failed',
                     'sent_at' => current_time('mysql'),
                 ]
@@ -121,12 +128,12 @@ function mmb_run_campaign($campaign_id, $recipient_group_id, $smtp_id) {
 }
 
 // Function to send emails using wp_mail()
-function send_campaign_email($recipient, $subject, $message) {
+function send_campaign_email($recipient, $subject, $message, $smtp_account) {
     // Set up email headers
     $headers = array('Content-Type: text/html; charset=UTF-8');
-    
+
     // Use wp_mail() to send emails
     $success = wp_mail($recipient->recipient_email, $subject, $message, $headers);
-    
+
     return $success;
 }

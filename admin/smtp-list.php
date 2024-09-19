@@ -47,12 +47,14 @@ function mmb_list_smtp_accounts() {
                             <td><?php echo esc_html($row->smtp_username); ?></td>
                             <td>
                                 <?php
+                                // Fetch SMTP Group name
                                 $group_name = $wpdb->get_var($wpdb->prepare("SELECT group_name FROM {$wpdb->prefix}mmb_smtp_groups WHERE id = %d", $row->smtp_group_id));
                                 echo esc_html($group_name ? $group_name : __('No Group', 'multimail-blaster'));
                                 ?>
                             </td>
                             <td>
                                 <?php
+                                // Fetch Owner (Admin/User who added the SMTP account)
                                 $owner = get_userdata($row->owner_id);
                                 echo esc_html($owner ? $owner->user_login : __('Unknown', 'multimail-blaster'));
                                 ?>
@@ -69,6 +71,16 @@ function mmb_list_smtp_accounts() {
             <!-- Bulk Actions -->
             <input type="submit" name="bulk_delete" value="<?php esc_html_e('Delete Selected', 'multimail-blaster'); ?>" class="button button-primary">
         </form>
+
+        <!-- JavaScript to handle "Select All" checkbox -->
+        <script type="text/javascript">
+            document.getElementById('select-all').addEventListener('click', function() {
+                let checkboxes = document.querySelectorAll('input[name="smtp_ids[]"]');
+                for (let checkbox of checkboxes) {
+                    checkbox.checked = this.checked;
+                }
+            });
+        </script>
         <?php
     } else {
         echo '<p>' . esc_html__('No SMTP accounts found.', 'multimail-blaster') . '</p>';
