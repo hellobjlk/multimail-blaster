@@ -15,9 +15,9 @@ function mmb_add_recipient_form() {
         if (isset($_POST['recipient_name'])) {
             $recipient_name = sanitize_text_field($_POST['recipient_name']);
             $recipient_email = sanitize_email($_POST['recipient_email']);
-            $personalized_greeting = sanitize_text_field($_POST['personalized_greeting']);
-            $personalized_subject = sanitize_text_field($_POST['personalized_subject']);
-            $personalized_message = sanitize_textarea_field($_POST['personalized_message']);
+            $personal_greeting = sanitize_text_field($_POST['personal_greeting']);
+            $personal_subject = sanitize_text_field($_POST['personal_subject']);
+            $personal_message = sanitize_textarea_field($_POST['personal_message']);
             $group_id = sanitize_text_field($_POST['recipient_group']); // Group selected for the recipient
 
             // Insert recipient into the database
@@ -26,9 +26,9 @@ function mmb_add_recipient_form() {
                 array(
                     'recipient_name' => $recipient_name,
                     'recipient_email' => $recipient_email,
-                    'personalized_greeting' => $personalized_greeting,
-                    'personalized_subject' => $personalized_subject,
-                    'personalized_message' => $personalized_message,
+                    'personal_greeting' => $personal_greeting,
+                    'personal_subject' => $personal_subject,
+                    'personal_message' => $personal_message,
                     'owner_id' => get_current_user_id()
                 )
             );
@@ -61,9 +61,9 @@ function mmb_add_recipient_form() {
 
                         $recipient_name = sanitize_text_field($data[0]);
                         $recipient_email = sanitize_email($data[1]);
-                        $personalized_greeting = sanitize_text_field($data[2]);
-                        $personalized_subject = sanitize_text_field($data[3]);
-                        $personalized_message = sanitize_textarea_field($data[4]);
+                        $personal_greeting = sanitize_text_field($data[2]);
+                        $personal_subject = sanitize_text_field($data[3]);
+                        $personal_message = sanitize_textarea_field($data[4]);
 
                         // Insert recipient into the database
                         $wpdb->insert(
@@ -71,9 +71,9 @@ function mmb_add_recipient_form() {
                             array(
                                 'recipient_name' => $recipient_name,
                                 'recipient_email' => $recipient_email,
-                                'personalized_greeting' => $personalized_greeting,
-                                'personalized_subject' => $personalized_subject,
-                                'personalized_message' => $personalized_message,
+                                'personal_greeting' => $personal_greeting,
+                                'personal_subject' => $personal_subject,
+                                'personal_message' => $personal_message,
                                 'owner_id' => get_current_user_id()
                             )
                         );
@@ -110,16 +110,16 @@ function mmb_add_recipient_form() {
                 <td><input type="email" id="recipient_email" name="recipient_email" required /></td>
             </tr>
             <tr>
-                <th><label for="personalized_greeting"><?php esc_html_e('Personal Greeting', 'multimail-blaster'); ?></label></th>
-                <td><input type="text" id="personalized_greeting" name="personalized_greeting" /></td>
+                <th><label for="personal_greeting"><?php esc_html_e('Personal Greeting', 'multimail-blaster'); ?></label></th>
+                <td><input type="text" id="personal_greeting" name="personal_greeting" /></td>
             </tr>
             <tr>
-                <th><label for="personalized_subject"><?php esc_html_e('Personal Subject', 'multimail-blaster'); ?></label></th>
-                <td><input type="text" id="personalized_subject" name="personalized_subject" /></td>
+                <th><label for="personal_subject"><?php esc_html_e('Personal Subject', 'multimail-blaster'); ?></label></th>
+                <td><input type="text" id="personal_subject" name="personal_subject" /></td>
             </tr>
             <tr>
-                <th><label for="personalized_message"><?php esc_html_e('Personal Message', 'multimail-blaster'); ?></label></th>
-                <td><textarea id="personalized_message" name="personalized_message"></textarea></td>
+                <th><label for="personal_message"><?php esc_html_e('Personal Message', 'multimail-blaster'); ?></label></th>
+                <td><textarea id="personal_message" name="personal_message"></textarea></td>
             </tr>
             <tr>
                 <th><label for="recipient_group"><?php esc_html_e('Assign to Group', 'multimail-blaster'); ?></label></th>

@@ -11,36 +11,12 @@ function mmb_create_tables() {
     // Define table names with WordPress prefix
     $smtp_table = $wpdb->prefix . 'mmb_smtp_accounts';
     $recipients_table = $wpdb->prefix . 'mmb_recipients';
-    $campaigns_table = $wpdb->prefix . 'mmb_campaigns'; // For Campaign Manager
-    $campaign_logs_table = $wpdb->prefix . 'mmb_campaign_logs'; // For Campaign reporting/logs
+    $campaigns_table = $wpdb->prefix . 'mmb_campaigns';
+    $campaign_logs_table = $wpdb->prefix . 'mmb_campaign_logs';
     $settings_table = $wpdb->prefix . 'mmb_settings';
     $smtp_groups_table = $wpdb->prefix . 'mmb_smtp_groups';
     $recipient_groups_table = $wpdb->prefix . 'mmb_recipient_groups';
     $recipient_group_relationship_table = $wpdb->prefix . 'mmb_recipient_group_relationship';
-
-    // SQL for creating the Campaigns table
-    $sql_campaigns_table = "CREATE TABLE IF NOT EXISTS $campaigns_table (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        campaign_name varchar(255) NOT NULL,
-        subject varchar(255) NOT NULL,
-        message longtext NOT NULL,
-        created_at datetime DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY  (id)
-    ) $charset_collate;";
-
-    // SQL for creating the Campaign Logs table (for reporting)
-    $sql_campaign_logs_table = "CREATE TABLE IF NOT EXISTS $campaign_logs_table (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        campaign_id mediumint(9) NOT NULL,
-        recipient_id mediumint(9) NOT NULL,
-        smtp_id mediumint(9) NOT NULL,
-        status varchar(50) NOT NULL,
-        sent_at datetime DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY  (id),
-        FOREIGN KEY (campaign_id) REFERENCES $campaigns_table(id),
-        FOREIGN KEY (recipient_id) REFERENCES $recipients_table(id),
-        FOREIGN KEY (smtp_id) REFERENCES $smtp_table(id)
-    ) $charset_collate;";
 
     // SQL for creating the SMTP Accounts table
     $sql_smtp_table = "CREATE TABLE IF NOT EXISTS $smtp_table (
@@ -66,6 +42,30 @@ function mmb_create_tables() {
         owner_id mediumint(9) DEFAULT NULL, -- Owner (Admin/User who added)
         status varchar(20) DEFAULT 'active',
         PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    // SQL for creating the Campaigns table
+    $sql_campaigns_table = "CREATE TABLE IF NOT EXISTS $campaigns_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        campaign_name varchar(255) NOT NULL,
+        subject varchar(255) NOT NULL,
+        message longtext NOT NULL,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    // SQL for creating the Campaign Logs table (for reporting)
+    $sql_campaign_logs_table = "CREATE TABLE IF NOT EXISTS $campaign_logs_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        campaign_id mediumint(9) NOT NULL,
+        recipient_id mediumint(9) NOT NULL,
+        smtp_id mediumint(9) NOT NULL,
+        status varchar(50) NOT NULL,
+        sent_at datetime DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id),
+        FOREIGN KEY (campaign_id) REFERENCES $campaigns_table(id),
+        FOREIGN KEY (recipient_id) REFERENCES $recipients_table(id),
+        FOREIGN KEY (smtp_id) REFERENCES $smtp_table(id)
     ) $charset_collate;";
 
     // SQL for creating the SMTP Groups table

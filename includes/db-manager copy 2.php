@@ -11,12 +11,34 @@ function mmb_create_tables() {
     // Define table names with WordPress prefix
     $smtp_table = $wpdb->prefix . 'mmb_smtp_accounts';
     $recipients_table = $wpdb->prefix . 'mmb_recipients';
-    $campaigns_table = $wpdb->prefix . 'mmb_campaigns'; // For Campaign Manager
-    $campaign_logs_table = $wpdb->prefix . 'mmb_campaign_logs'; // For Campaign reporting/logs
+    $campaigns_table = $wpdb->prefix . 'mmb_campaigns';
+    $campaign_logs_table = $wpdb->prefix . 'mmb_campaign_logs';
     $settings_table = $wpdb->prefix . 'mmb_settings';
     $smtp_groups_table = $wpdb->prefix . 'mmb_smtp_groups';
-    $recipient_groups_table = $wpdb->prefix . 'mmb_recipient_groups';
-    $recipient_group_relationship_table = $wpdb->prefix . 'mmb_recipient_group_relationship';
+    $recipient_groups_table = $wpdb->prefix . 'mmb_recipient_groups'; // NEW
+    $recipient_group_relationship_table = $wpdb->prefix . 'mmb_recipient_group_relationship'; // NEW
+
+    // SQL for creating the SMTP Accounts table
+    $sql_smtp_table = "CREATE TABLE IF NOT EXISTS $smtp_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        smtp_host varchar(255) NOT NULL,
+        smtp_port int(11) NOT NULL,
+        smtp_username varchar(255) NOT NULL,
+        smtp_password varchar(255) NOT NULL,
+        encryption_type varchar(10) NOT NULL,
+        smtp_group_id mediumint(9) DEFAULT NULL, -- New column for SMTP group
+        owner_id mediumint(9) NOT NULL, -- new column to store owner (admin or user)
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    // SQL for creating the Recipients table
+    $sql_recipients_table = "CREATE TABLE IF NOT EXISTS $recipients_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        recipient_email varchar(255) NOT NULL,
+        recipient_name varchar(255) DEFAULT NULL,
+        status varchar(20) DEFAULT 'active',
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
 
     // SQL for creating the Campaigns table
     $sql_campaigns_table = "CREATE TABLE IF NOT EXISTS $campaigns_table (
@@ -40,32 +62,6 @@ function mmb_create_tables() {
         FOREIGN KEY (campaign_id) REFERENCES $campaigns_table(id),
         FOREIGN KEY (recipient_id) REFERENCES $recipients_table(id),
         FOREIGN KEY (smtp_id) REFERENCES $smtp_table(id)
-    ) $charset_collate;";
-
-    // SQL for creating the SMTP Accounts table
-    $sql_smtp_table = "CREATE TABLE IF NOT EXISTS $smtp_table (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        smtp_host varchar(255) NOT NULL,
-        smtp_port int(11) NOT NULL,
-        smtp_username varchar(255) NOT NULL,
-        smtp_password varchar(255) NOT NULL,
-        encryption_type varchar(10) NOT NULL,
-        smtp_group_id mediumint(9) DEFAULT NULL, -- SMTP group association
-        owner_id mediumint(9) NOT NULL, -- Owner (Admin/User who added)
-        PRIMARY KEY  (id)
-    ) $charset_collate;";
-
-    // SQL for creating the Recipients table without recipient_group_id (handled by relationship table)
-    $sql_recipients_table = "CREATE TABLE IF NOT EXISTS $recipients_table (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        recipient_email varchar(255) NOT NULL,
-        recipient_name varchar(255) DEFAULT NULL,
-        personalized_greeting varchar(255) DEFAULT NULL,
-        personalized_subject varchar(255) DEFAULT NULL,
-        personalized_message longtext DEFAULT NULL,
-        owner_id mediumint(9) DEFAULT NULL, -- Owner (Admin/User who added)
-        status varchar(20) DEFAULT 'active',
-        PRIMARY KEY  (id)
     ) $charset_collate;";
 
     // SQL for creating the SMTP Groups table
@@ -107,9 +103,22 @@ function mmb_create_tables() {
     dbDelta($sql_campaigns_table);
     dbDelta($sql_campaign_logs_table);
     dbDelta($sql_smtp_groups_table);
-    dbDelta($sql_recipient_groups_table);
-    dbDelta($sql_recipient_group_relationship_table);
+    dbDelta($sql_recipient_groups_table); // NEW
+    dbDelta($sql_recipient_group_relationship_table); // NEW
     dbDelta($sql_settings_table);
+
+    // Alter the SMTP Accounts table to add smtp_group_id if it doesn't exist
+    $column_exists = $wpdb->get_results("SHOW COLUMNS FROM $smtp_table LIKE 'smtp_group_id'");
+    if (empty($column_exists)) {
+    $wpdb->query("ALTER TABLE $smtp_table ADD smtp_group_id mediumint(9) DEFAULT NULL");
+    }
+
+    // Alter the SMTP Accounts table to add owner_id if it doesn't exist
+    $owner_column_exists = $wpdb->get_results("SHOW COLUMNS FROM $smtp_table LIKE 'owner_id'");
+    if (empty($owner_column_exists)) {
+    $wpdb->query("ALTER TABLE $smtp_table ADD owner_id mediumint(9) DEFAULT NULL");
+    }
+
 }
 
 // Function to insert default settings (e.g., batch size, daily limit, etc.)

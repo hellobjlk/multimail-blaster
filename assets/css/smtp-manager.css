@@ -1,0 +1,23 @@
+/* Basic Tab Styles */
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.nav-tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.nav-tab-active {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content:first-child {
+    display: block; /* Initially display the first tab */
+}

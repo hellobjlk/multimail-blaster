@@ -29,32 +29,32 @@ function mmb_create_admin_menu() {
 
     // Submenu - Recipient Manager
     add_submenu_page(
-        'mmb-dashboard',
-        __('Recipient Manager', 'multimail-blaster'),
-        __('Recipient Manager', 'multimail-blaster'),
-        'manage_options',
-        'mmb-recipient-manager',
-        'mmb_recipient_manager_page'
+        'mmb-dashboard',                              // Parent slug
+        __('Recipient Manager', 'multimail-blaster'), // Page title
+        __('Recipient Manager', 'multimail-blaster'), // Menu title
+        'manage_options',                             // Capability
+        'mmb-recipient-manager',                      // Submenu slug
+        'mmb_recipient_manager_page'                  // Function to display Recipient Manager
     );
 
-    // Add submenu for Campaign Manager
+    // Submenu - Campaign Manager
     add_submenu_page(
-        'mmb-dashboard',                               // Parent slug (matches main menu)
-        __('Campaign Manager', 'multimail-blaster'),   // Page title
-        __('Campaign Manager', 'multimail-blaster'),   // Menu title
-        'manage_options',                              // Capability
-        'mmb-campaign-manager',                        // Submenu slug
-        'mmb_campaign_manager_page'                    // Function to display Campaign Manager page
+        'mmb-dashboard',                              // Parent slug
+        __('Campaign Manager', 'multimail-blaster'),  // Page title
+        __('Campaign Manager', 'multimail-blaster'),  // Menu title
+        'manage_options',                             // Capability
+        'mmb-campaign-manager',                       // Submenu slug
+        'mmb_campaign_manager_page'                   // Function to display Campaign Manager
     );
-    
+
     // Submenu - Run Campaign
     add_submenu_page(
-        'mmb-dashboard',                                // Parent slug
-        __('Run Campaign', 'multimail-blaster'),        // Page title
-        __('Run Campaign', 'multimail-blaster'),        // Menu title
-            'manage_options',                               // Capability
-        'mmb-run-campaign',                             // Submenu slug
-        'mmb_run_campaign_page'                         // Function to display Run Campaign page
+        'mmb-dashboard',                              // Parent slug
+        __('Run Campaign', 'multimail-blaster'),      // Page title
+        __('Run Campaign', 'multimail-blaster'),      // Menu title
+        'manage_options',                             // Capability
+        'mmb-run-campaign',                           // Submenu slug
+        'mmb_run_campaign_page'                       // Function to display the Run Campaign page
     );
 
     // Submenu - Reports
@@ -77,17 +77,19 @@ function mmb_dashboard_page() {
 // Include the full content of SMTP Manager from smtp-manager.php
 require_once(plugin_dir_path(__FILE__) . '/smtp-manager.php');
 
-// Include the full content of Recipient Manager from recipient-manager.php
-require_once(plugin_dir_path(__FILE__) . '/recipient-manager.php'); // Ensure this file is correctly included
+// Recipient Manager page
+function mmb_recipient_manager_page() {
+    echo '<div class="wrap"><h1>' . esc_html__('Recipient Manager', 'multimail-blaster') . '</h1>';
+}
 
-
-// You can include campaign-add.php and campaign-list.php here
-require_once(plugin_dir_path(__FILE__) . '/campaign-manager.php');
-
+// Campaign Manager page
+function mmb_campaign_manager_page() {
+    echo '<div class="wrap"><h1>' . esc_html__('Campaign Manager', 'multimail-blaster') . '</h1>';
+}
 
 // Run Campaign page
 function mmb_run_campaign_page() {
-    require_once(plugin_dir_path(__FILE__) . 'run-campaign.php');
+    echo '<div class="wrap"><h1>' . esc_html__('Run Campaign', 'multimail-blaster') . '</h1>';
 }
 
 // Reports page

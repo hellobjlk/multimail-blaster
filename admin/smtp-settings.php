@@ -1,11 +1,8 @@
 <?php
 // smtp-settings.php
 
-// Function to display SMTP settings form
-function mmb_smtp_settings_form() {
+function mmb_get_smtp_settings() {
     ?>
-    <h2><?php esc_html_e('SMTP Settings', 'multimail-blaster'); ?></h2>
-
     <form method="POST" action="">
         <table class="form-table">
             <tr>
@@ -17,7 +14,7 @@ function mmb_smtp_settings_form() {
                 <td><input type="number" id="daily_limit" name="daily_limit" required /></td>
             </tr>
             <tr>
-                <th><label for="rotation_delay"><?php esc_html_e('Rotation Delay (Seconds)', 'multimail-blaster'); ?></label></th>
+                <th><label for="rotation_delay"><?php esc_html_e('Rotation Delay', 'multimail-blaster'); ?></label></th>
                 <td><input type="number" id="rotation_delay" name="rotation_delay" required /></td>
             </tr>
         </table>
@@ -25,7 +22,4 @@ function mmb_smtp_settings_form() {
     </form>
     <?php
 }
-
-// Call the function to display the settings form
-mmb_smtp_settings_form();
-?>
+mmb_get_smtp_settings();

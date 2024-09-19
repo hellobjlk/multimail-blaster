@@ -1,29 +1,24 @@
 <?php
-// recipient-manager.php
+// campaign-manager.php
 
-function mmb_recipient_manager_page() {
+function mmb_campaign_manager_page() {
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e('Recipient Manager', 'multimail-blaster'); ?></h1>
-
+        <h1><?php esc_html_e('Campaign Manager', 'multimail-blaster'); ?></h1>
+        
         <!-- Tabs Navigation -->
         <h2 class="nav-tab-wrapper">
-            <a href="#tab-1" class="nav-tab nav-tab-active"><?php esc_html_e('Add Recipient', 'multimail-blaster'); ?></a>
-            <a href="#tab-2" class="nav-tab"><?php esc_html_e('Manage Recipients', 'multimail-blaster'); ?></a>
-            <a href="#tab-3" class="nav-tab"><?php esc_html_e('Recipient Groups', 'multimail-blaster'); ?></a>
+            <a href="#tab-1" class="nav-tab nav-tab-active"><?php esc_html_e('Add Campaign', 'multimail-blaster'); ?></a>
+            <a href="#tab-2" class="nav-tab"><?php esc_html_e('Manage Campaigns', 'multimail-blaster'); ?></a>
         </h2>
 
         <!-- Tab Content -->
         <div id="tab-1" class="tab-content">
-            <?php require_once(plugin_dir_path(__FILE__) . 'recipient-add.php'); ?>
+            <?php require_once(plugin_dir_path(__FILE__) . 'campaign-add.php'); ?>
         </div>
 
         <div id="tab-2" class="tab-content" style="display:none;">
-            <?php require_once(plugin_dir_path(__FILE__) . 'recipient-list.php'); ?>
-        </div>
-
-        <div id="tab-3" class="tab-content" style="display:none;">
-            <?php require_once(plugin_dir_path(__FILE__) . 'recipient-groups.php'); ?>
+            <?php require_once(plugin_dir_path(__FILE__) . 'campaign-list.php'); ?>
         </div>
     </div>
 
@@ -52,3 +47,4 @@ function mmb_recipient_manager_page() {
     </script>
     <?php
 }
+?>
